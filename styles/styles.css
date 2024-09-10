@@ -1,0 +1,45 @@
+table, th, td {
+    border:1px solid black;
+    text-align: center;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    padding: 20px; 
+  }
+  
+  .column1, .column2 {
+    background-color: #f8f9fa; 
+    padding: 20px; 
+    border: 1px solid #dee2e6; 
+    border-radius: 5px; 
+  }
+  
+  #contenedorTop, #container_resultados {
+    margin-bottom: 20px;
+  }
+  
+  h1.display-1 {
+    text-align: center; 
+    margin-bottom: 40px;
+  }
+  
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.btn .btn-secondary{
+            width: 20px; /* Ancho del botón */
+            height: 20px; /* Alto del botón */
+}
+
+#close{
+  position: absolute;
+  right: 0; 
+  top: 50px;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
