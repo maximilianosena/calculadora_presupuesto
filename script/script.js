@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let takeToken=localStorage.setItem("token", saveItems.token);
         let token= localStorage.getItem("token")
         try {
-        const response = await fetch('http://localhost:5500/info', {
+        const response = await fetch('https://backend-presupuestadora.vercel.app/info', {
                 method: 'GET',
                 headers: {
                 'Authorization': `Bearer ${token}`
