@@ -9,14 +9,14 @@ formulario.addEventListener("submit", async function (e){
     e.preventDefault();
     const user = input_user.value.trim()
     const pass = input_pass.value.trim()
-    
+    console.log('Datos enviados:', { usuario: user, código: pass })
     if (user!=="" && pass!=="" ){
         const obj= {usuario: `${user}`,
             código: `${pass}`
             }
-
+    console.log(obj)
     try { 
-        console.log(obj)
+        
         // Hacer una solicitud POST usando fetch
         const response = await fetch('https://backend-presupuestadora.vercel.app/login', {
         method: 'POST',  // Tipo de solicitud
