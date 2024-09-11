@@ -16,6 +16,7 @@ formulario.addEventListener("submit", async function (e){
             }
 
     try { 
+        console.log(obj)
         // Hacer una solicitud POST usando fetch
         const response = await fetch('https://backend-presupuestadora.vercel.app/login', {
         method: 'POST',  // Tipo de solicitud
