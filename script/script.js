@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(grupo_cuadrados)
                 resultado.innerHTML = `<figure>
     <blockquote class="blockquote">
-    El área de este fragmento es de ${parseFloat(cuadrado).toFixed(2)} metros cuadrados 
+    El área de este fragmento es de ${Number.isInteger(parseFloat(cuadrado))?(parseFloat(cuadrado)):(parseFloat(cuadrado).toFixed(2))} metros cuadrados 
           </blockquote> 
                              <figcaption class="blockquote-footer">
                             <p>Si desea ingresar otro segmento de material o área de zócalo, 
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("Área total", total)
             cotizacion.innerHTML = `
     <blockquote class="blockquote">
-    La cotización es de U$D ${valorFinal.toFixed(2)} para ${total.toFixed(2)} m2 totales <br>
+    La cotización es de U$D ${Number.isInteger(valorFinal)?valorFinal:valorFinal.toFixed(2)} para ${Number.isInteger(total)?total:total.toFixed(2)} m2 totales <br>
      </blockquote>
                              <button id="borrar" class="btn btn-danger">Borrar</button>
                              <fieldset>
@@ -430,47 +430,89 @@ document.addEventListener("DOMContentLoaded", () => {
                 tipoSpan.innerHTML = `
                     <br>
                     <label for="${tipo.id}Numero">Cuántos metros lineales se harán?:</label>
-                    <input type="text" id="${tipo.id}Numero"> <br>
-                    <label for="${tipo.id}Area">Área de la tira:</label>
+                    <input type="text" id="${tipo.id}Numero"> <br><br>
+                    <label for="${tipo.id}Area">Metros² de la tira:</label>
                     <figcaption class="blockquote-footer">
-                            <p>Para ingresar más de una área escribir en orden correlativo sus lados</p> 
-                            <p>Ejemplo: Área 1(2m largo x 5m ancho) Área 2 (3m largo x 6m ancho)<p>
-                            <p>Escribir: Largo 2+3 | Ancho 5+6<p>
+                            <p>Para ingresar más de una segmento utilice paréntesis</p> 
+                            <p>Ejemplo: (2x5) + (3x6)<p>
                               </figcaption>
-                    Largo: <input type="text" name="area1" id="${tipo.id}largo"> <br>
-                    Ancho: <input type="text" name="area1" id="${tipo.id}alto"> <hr>
+                    Metros: <input type="text" name="area1" id="${tipo.id}metros"> <br>
                     <button class="btn btn-secondary" id="${tipo.id}button"> Enviar </button>
                 `;
 
 
                 const tipoNumeroInput = document.getElementById(`${tipo.id}Numero`);
-                const largoTerminación = document.getElementById(`${tipo.id}largo`);
-                const altoTerminación = document.getElementById(`${tipo.id}alto`);
+                const metrosCuadrados = document.getElementById(`${tipo.id}metros`);
                 const buttonCalculo = document.getElementById(`${tipo.id}button`);
 
                 console.log(tipoNumeroInput)
 
                 function recalcularArea() {
-                    let valorLargo = largoTerminación.value.trim() || 0;
-                    let valorAlto = altoTerminación.value.trim() || 0;
-                    if (typeof valorLargo === 'string' && valorLargo.includes("+")|| typeof valorAlto === 'string' && valorAlto.includes("+")){
-                        let grupoLargos = valorLargo.split("+")
-                        let grupoAltos = valorAlto.split("+")
-                        let area = 0
-                     for (let i=0; i < grupoAltos.length; i++){
-                        let fragmento_area = grupoLargos[i] * grupoAltos[i]
-                        area += fragmento_area
-                        console.log("AREA " + area)
-                     } 
+                    let metrocuadrado = metrosCuadrados.value.trim() || 0;
+                    let area = 0
+                    if (typeof metrocuadrado === 'string' && metrocuadrado.includes("x") 
+                        && !metrocuadrado.includes("+")){
+                        let areaInglete = metrocuadrado.split("x")
+                        console.log("Area x ", areaInglete)
+                        
+                            if (areaInglete[0]=== undefined){
+                                area += 0
+                            } else {
+                                let resultado = areaInglete[0] * areaInglete[1]
+                                area += resultado
+                            }
+                        
+                            console.log(area)
+                            let precioArea = area * precio.value
+                               console.log(precioArea)
+                               localStorage.setItem(`Precio area ${name}`, precioArea)
+                               localStorage.setItem(`Area de la tira ${name}`, area)
+                               totalPulidos += precioArea;
+                               actualizarValorFinal()
+                    }
+                    else if (typeof metrocuadrado === 'string' && metrocuadrado.includes(" + ") && metrocuadrado.includes(")")){
+                     
+                        let areaInglete = metrocuadrado.split(" ")
+                        
+                        console.log("Area con espacio + ", areaInglete)
+                        for (let a=0; a < areaInglete.length; a++){
+                            if (areaInglete[a][1] === undefined || areaInglete[a][3] === undefined){
+                                area += 0
+                            } else {
+                                let resultado = areaInglete[a][1] * areaInglete[a][3]
+                                area += resultado
+                            }
+                        }
+                        console.log(area)
                      let precioArea = area * precio.value
                         console.log(precioArea)
                         localStorage.setItem(`Precio area ${name}`, precioArea)
                         localStorage.setItem(`Area de la tira ${name}`, area)
                         totalPulidos += precioArea;
                         actualizarValorFinal()
-                    } else 
-                    if (valorLargo > 0 && valorAlto > 0) {
-                        let area = (valorAlto * valorLargo);
+                    } else if (typeof metrocuadrado === 'string' && metrocuadrado.includes("+") && metrocuadrado.includes(")")){
+                     
+                        let areaInglete = metrocuadrado.split("+")
+                        
+                        console.log("Area + sin espacio", areaInglete)
+                        for (let a=0; a < areaInglete.length; a++){
+                            if (areaInglete[a][1] === undefined || areaInglete[a][3] === undefined){
+                                area += 0
+                            } else {
+                                let resultado = areaInglete[a][1] * areaInglete[a][3]
+                                area += resultado
+                            }
+                        }
+                        console.log(area)
+                     let precioArea = area * precio.value
+                        console.log(precioArea)
+                        localStorage.setItem(`Precio area ${name}`, precioArea)
+                        localStorage.setItem(`Area de la tira ${name}`, area)
+                        totalPulidos += precioArea;
+                        actualizarValorFinal()
+                    }else 
+                    if (metrocuadrado > 0) {
+                        
                         console.log("AREA " + area)
                         console.log("PRECIO METRO CUADRADO:" + precio.value)
                         let precioArea = area * precio.value
@@ -484,6 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         alert("De click nuevamente en la opción")
                     }
                 }
+                
 
                 buttonCalculo.addEventListener("click", () => {
                     let valorInput = tipoNumeroInput.value
@@ -500,25 +543,23 @@ document.addEventListener("DOMContentLoaded", () => {
                         console.log(tipoNumeroInput.id)
                         localStorage.setItem(tipo.name, valorInput)
                         localStorage.setItem("metrosIngleteado", valorInput)
-                        altoTerminación.addEventListener("input", recalcularArea);
-                        largoTerminación.addEventListener("input", recalcularArea)
+                        metrosCuadrados.addEventListener("input", recalcularArea)
                         console.log(registrosPulidos);
                     }
                     tipoNumeroInput.classList.add("disabled")
-                    altoTerminación.classList.add("disabled")
-                    largoTerminación.classList.add("disabled")
+                    metrosCuadrados.classList.add("disabled")
                 });
 
 
 
             } else {
                 const tipoNumeroInput = document.getElementById(`${tipo.id}Numero`);
-                const largoTerminación = document.getElementById(`${tipo.id}largo`);
-                const altoTerminación = document.getElementById(`${tipo.id}alto`);
+                const metrosCuadrados = document.getElementById(`${tipo.id}metros`);
+                
 
                 
-                if (largoTerminación) largoTerminación.value = "";
-                if (altoTerminación) altoTerminación.value = "";
+                if (metrosCuadrados) metrosCuadrados.value = "";
+                
 
                 let storageArea = parseFloat(localStorage.getItem(`Precio area ${name}`)) || 0;
                 console.log("Este es el PRECIO AREA:", storageArea)
@@ -745,7 +786,7 @@ document.addEventListener("DOMContentLoaded", () => {
             view_resultados.innerHTML=""
             for (i; i < localStorage.length; i++) {
                 if (localStorage.key(i) == "Área total") {
-                 view_resultados.innerHTML += `<li> ${localStorage.key(i)} a trabajar -  ${parseFloat(localStorage.getItem(localStorage.key(i))).toFixed(2)} metros cuadrados </li>`
+                 view_resultados.innerHTML += `<li> ${localStorage.key(i)} a trabajar -  ${Number.isInteger(parseFloat(localStorage.getItem(localStorage.key(i))))?parseFloat(localStorage.getItem(localStorage.key(i))):parseFloat(localStorage.getItem(localStorage.key(i))).toFixed(2)} metros cuadrados </li>`
                 }
                 else if (localStorage.key(i) == "Precio m2" || localStorage.key(i) == "Precio area") {
                     view_resultados.innerHTML += `<li> ${localStorage.key(i)} - USD ${localStorage.getItem(localStorage.key(i))} </li>`
@@ -770,8 +811,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                                                         USD ${localStorage.getItem("Precio area Ingleteado 90°")}</li>`
                 } else if (localStorage.key(i) == "Tira antiderrame") {
                     view_resultados.innerHTML += `<li> Se realizará: ${localStorage.key(i)} - con ${sumaMetrosLineales(i)} metros lineales</li>
-        <li> Con un area de la tira de: ${parseFloat(localStorage.getItem("Area de la tira Tira antiderrame")).toFixed(2)} metros cuadrados dando un total de 
-                                        USD ${localStorage.getItem("Precio area Tira antiderrame")}</li>`
+        <li> Con un area de la tira de: ${Number.isInteger(parseFloat(localStorage.getItem("Area de la tira Tira antiderrame")))?(parseFloat(localStorage.getItem("Area de la tira Tira antiderrame"))):(parseFloat(localStorage.getItem("Area de la tira Tira antiderrame"))).toFixed(2)} metros cuadrados dando un total de 
+                                        USD ${Number.isInteger(parseFloat(localStorage.getItem("Precio area Tira antiderrame")))?(localStorage.getItem("Precio area Tira antiderrame")):(localStorage.getItem("Precio area Tira antiderrame")).toFixed(2)}</li>`
                 }
                 else if (localStorage.key(i) == "Thiner" ||
                     localStorage.key(i) == "Silicona") {
@@ -782,9 +823,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
             if (final == 0){
-                 view_resultados.innerHTML += `<hr><div class="alert alert-primary text-center" role="alert"> Precio Final: USD${valorFinal.toFixed(2)}</div>`
+                 view_resultados.innerHTML += `<hr><div class="alert alert-primary text-center" role="alert"> Precio Final: USD${Number.isInteger(valorFinal)?valorFinal:valorFinal.toFixed(2)}</div>`
             } else {
-                view_resultados.innerHTML += `<div class="alert alert-primary text-center" role="alert"> Precio Final: USD${final.toFixed(2)}</div>`
+                view_resultados.innerHTML += `<div class="alert alert-primary text-center" role="alert"> Precio Final: USD${Number.isInteger(final)?final:final.toFixed(2)}</div>`
             }
         
             view_resultados.innerHTML += `
@@ -820,7 +861,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         console.log("Sumando", final)
                     }
                 console.log(final.toFixed(2))
-                return final.toFixed(2)               
+                return final              
             }
         }
 
