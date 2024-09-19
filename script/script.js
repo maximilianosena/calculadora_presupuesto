@@ -434,7 +434,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     <label for="${tipo.id}Area">Metros² de la tira:</label>
                     <figcaption class="blockquote-footer">
                             <p>Para ingresar más de una segmento utilice signo +</p> 
-                            <p>Ejemplo: 2x5+3x6<p>
+                            <p>Maneras posibles: <br>
+                                                2x5+3x6 <br> 
+                                                2x5 + 3x6 <br>
+                                                (2x5) + (3x6)<br> 
+                                                (2x5)+(3x6)
+                                                <p>
                               </figcaption>
                     Metros: <input type="text" name="area1" id="${tipo.id}metros"> <br>
                     <button class="btn btn-secondary" id="${tipo.id}button"> Enviar </button>
@@ -481,7 +486,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             } else {
                                 let sacoX = areaInglete[a].includes("x")?areaInglete[a].split("x"):console.log("No es X")
                                 console.log(sacoX)
-                                let numeroInglete = sacoX.map(elemento => elemento.replace("(", "").replace(")", ""));
+                                sacoMas = sacoX.map(elemento => elemento.replace("(", "").replace(")", ""));
+                                let numeroInglete = sacoMas.map(elemento => elemento.replace("+", ""));
                                 console.log(numeroInglete)
                                 console.log("paso por el else y hago: ", numeroInglete[0],numeroInglete[1])
                                 let resultado = numeroInglete[0] * numeroInglete[1]
@@ -506,7 +512,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 if (areaInglete[a][1] === undefined || areaInglete[a] === undefined){
                                     area += 0
                                 } else {
-                                    let numeroInglete = areaInglete[a].split("x")
+                                    let sacoX = areaInglete[a].includes("x")?areaInglete[a].split("x"):console.log("No es X")
+                                     console.log(sacoX)
+                                     sacoMas = sacoX.map(elemento => elemento.replace("(", "").replace(")", ""));
+                                    let numeroInglete = sacoMas.map(elemento => elemento.replace("+", ""));
                                     console.log("paso por el else y hago: ", numeroInglete )
                                     let resultado = numeroInglete[0] * numeroInglete[1]
                                     area += resultado
