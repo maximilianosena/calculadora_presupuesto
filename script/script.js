@@ -433,8 +433,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     <input type="text" id="${tipo.id}Numero"> <br><br>
                     <label for="${tipo.id}Area">Metros² de la tira:</label>
                     <figcaption class="blockquote-footer">
-                            <p>Para ingresar más de una segmento utilice paréntesis</p> 
-                            <p>Ejemplo: (2x5) + (3x6)<p>
+                            <p>Para ingresar más de una segmento utilice signo +</p> 
+                            <p>Ejemplo: 2x5+3x6<p>
                               </figcaption>
                     Metros: <input type="text" name="area1" id="${tipo.id}metros"> <br>
                     <button class="btn btn-secondary" id="${tipo.id}button"> Enviar </button>
@@ -476,10 +476,62 @@ document.addEventListener("DOMContentLoaded", () => {
                         
                         console.log("Area con espacio + ", areaInglete)
                         for (let a=0; a < areaInglete.length; a++){
-                            if (areaInglete[a][1] === undefined || areaInglete[a][3] === undefined){
+                            if (areaInglete[a][0] === undefined || areaInglete[a][2] === undefined|| areaInglete[a][4] === undefined || areaInglete[a] === undefined){
                                 area += 0
                             } else {
-                                let resultado = areaInglete[a][1] * areaInglete[a][3]
+                                let sacoX = areaInglete[a].includes("x")?areaInglete[a].split("x"):console.log("No es X")
+                                console.log(sacoX)
+                                let numeroInglete = sacoX.map(elemento => elemento.replace("(", "").replace(")", ""));
+                                console.log(numeroInglete)
+                                console.log("paso por el else y hago: ", numeroInglete[0],numeroInglete[1])
+                                let resultado = numeroInglete[0] * numeroInglete[1]
+                                area += resultado
+                            
+                        }
+                        }
+                        console.log(area)
+                     let precioArea = area * precio.value
+                        console.log(precioArea)
+                        localStorage.setItem(`Precio area ${name}`, precioArea)
+                        localStorage.setItem(`Area de la tira ${name}`, area)
+                        totalPulidos += precioArea;
+                        actualizarValorFinal()
+                    }else if (typeof metrocuadrado === 'string' && metrocuadrado.includes(" + ") && !metrocuadrado.includes(")")){
+                     
+                            let areaInglete = metrocuadrado.split(" ")
+
+                            console.log("Area con espacio + y sin () array", areaInglete)
+                    
+                            for (let a=0; a < areaInglete.length; a++){
+                                if (areaInglete[a][1] === undefined || areaInglete[a] === undefined){
+                                    area += 0
+                                } else {
+                                    let numeroInglete = areaInglete[a].split("x")
+                                    console.log("paso por el else y hago: ", numeroInglete )
+                                    let resultado = numeroInglete[0] * numeroInglete[1]
+                                    area += resultado
+                                }
+                            }
+                            console.log(area)
+                         let precioArea = area * precio.value
+                            console.log(precioArea)
+                            localStorage.setItem(`Precio area ${name}`, precioArea)
+                            localStorage.setItem(`Area de la tira ${name}`, area)
+                            totalPulidos += precioArea;
+                            actualizarValorFinal()
+                    } else if (typeof metrocuadrado === 'string' && metrocuadrado.includes("+") && !metrocuadrado.includes(")")){
+                     
+                        let areaInglete = metrocuadrado.split("+")
+
+                        console.log("Area sin espacio + y sin () array", areaInglete)
+                        
+                        for (let a=0; a < areaInglete.length; a++){
+                            if (areaInglete[a][1] === undefined || areaInglete[a] === undefined){
+                                area += 0
+                            } else {
+                                let numeroInglete = areaInglete[a].split("x")
+                                console.log("paso por el else y hago: ", numeroInglete )
+                                let resultado = numeroInglete[0] * numeroInglete[1]
                                 area += resultado
                             }
                         }
@@ -490,7 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         localStorage.setItem(`Area de la tira ${name}`, area)
                         totalPulidos += precioArea;
                         actualizarValorFinal()
-                    } else if (typeof metrocuadrado === 'string' && metrocuadrado.includes("+") && metrocuadrado.includes(")")){
+                } else if (typeof metrocuadrado === 'string' && metrocuadrado.includes("+") && metrocuadrado.includes(")")){
                      
                         let areaInglete = metrocuadrado.split("+")
                         
@@ -499,7 +551,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             if (areaInglete[a][1] === undefined || areaInglete[a][3] === undefined){
                                 area += 0
                             } else {
-                                let resultado = areaInglete[a][1] * areaInglete[a][3]
+                                let sacoX = areaInglete[a].includes("x")?areaInglete[a].split("x"):console.log("No es X")
+                                console.log(sacoX)
+                                let numeroInglete = sacoX.map(elemento => elemento.replace("(", "").replace(")", ""));
+                                console.log(numeroInglete)
+                                console.log("paso por el else y hago: ", numeroInglete[0],numeroInglete[1])
+                                let resultado = numeroInglete[0] * numeroInglete[1]
                                 area += resultado
                             }
                         }
