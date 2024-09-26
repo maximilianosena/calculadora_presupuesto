@@ -434,7 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <label for="${tipo.id}Area">Metros² de la tira:</label>
                     <figcaption class="blockquote-footer">
                             <p>Para ingresar más de una segmento utilice signo +</p> 
-                            <p>Maneras posibles: <br>
+                            <p>Ejemplos de como ingresar: <br>
                                                 2x5+3x6 <br> 
                                                 2x5 + 3x6 <br>
                                                 (2x5) + (3x6)<br> 
@@ -442,7 +442,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                                 <p>
                               </figcaption>
                     Metros: <input type="text" name="area1" id="${tipo.id}metros"> <br>
-                    <button class="btn btn-secondary" id="${tipo.id}button"> Enviar </button>
+                     <figcaption class="blockquote-footer">
+                            <p>Una vez ingresado los datos, haga click en hecho y continúe</p> 
+                              </figcaption>
+                    <button class="btn btn-secondary" id="${tipo.id}button"> Hecho </button>
                 `;
 
 
@@ -932,4 +935,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     })
+
+    window.addEventListener('load', function () {
+        sessionStorage.setItem('is_reloading', 'true');
+    });
+    
+    window.addEventListener('beforeunload', function () {
+        if (sessionStorage.getItem('is_reloading')) {
+            
+            sessionStorage.removeItem('is_reloading');
+        } else {
+         
+            localStorage.clear();
+        }
+    });
+    
 })
