@@ -1,3 +1,17 @@
+window.addEventListener('load', function () {
+        sessionStorage.setItem('is_reloading', 'true');
+    });
+    
+    window.addEventListener('beforeunload', function () {
+        if (sessionStorage.getItem('is_reloading')) {
+            
+            sessionStorage.removeItem('is_reloading');
+        } else {
+         
+            localStorage.clear();
+        }
+    });
+
 document.addEventListener("DOMContentLoaded", () => {
 
     let input_largo = document.getElementById("alto")
@@ -936,18 +950,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     })
 
-    window.addEventListener('load', function () {
-        sessionStorage.setItem('is_reloading', 'true');
-    });
     
-    window.addEventListener('beforeunload', function () {
-        if (sessionStorage.getItem('is_reloading')) {
-            
-            sessionStorage.removeItem('is_reloading');
-        } else {
-         
-            localStorage.clear();
-        }
-    });
     
 })
